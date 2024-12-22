@@ -1,13 +1,16 @@
 import { StyleSheet, TextInput, View } from "react-native";
 import React from "react";
 
-const InputField = () => {
+const InputField = ({ searchText, setSearchText, handleSearch }) => {
     return (
         <View>
             <TextInput
                 placeholder='Search movies by title'
-                returnKeyType='go'
+                returnKeyType='search'
                 style={styles.textInput}
+                value={searchText}
+                onChangeText={setSearchText}
+                onSubmitEditing={handleSearch}
             />
         </View>
     );
