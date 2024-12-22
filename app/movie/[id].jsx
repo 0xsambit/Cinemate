@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Text, Image, StyleSheet, ScrollView, View } from "react-native";
+import {
+    Text,
+    Image,
+    StyleSheet,
+    ScrollView,
+    View,
+    Pressable,
+    Linking,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,7 +29,17 @@ export default function MovieDetails() {
                 console.error(error);
             }
         })();
-    }, [id]);
+    }, [id, type]);
+
+    const handleWatchSite = () => {
+        if (!movie?.title && !movie?.name) return;
+        // For TV shows, use "name"; for movies, "title"
+        const movieTitle = movie.title || movie.name;
+        const url = `https://www.google.com/search?q=${encodeURIComponent(
+            movieTitle
+        )}+watch`;
+        Linking.openURL(url);
+    };
 
     if (!movie) return <Text>Loading...</Text>;
 
@@ -36,61 +54,28 @@ export default function MovieDetails() {
                     resizeMode='contain'
                 />
                 <View style={{ gap: 10 }}>
-                    <Text style={styles.title}>{movie.title}</Text>
+                    <Text style={styles.title}>
+                        {movie.title || movie.name}
+                    </Text>
                     <View>
-                        <Text
-                            style={{
-                                fontFamily: "Poppins-Bold",
-                                fontSize: 20,
-                            }}>
+                        <Text style={styles.sectionHeading}>
                             Movie Overview:
                         </Text>
                         <Text style={styles.overview}>{movie.overview}</Text>
                     </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            gap: 20,
-                        }}>
-                        <Text
-                            style={{
-                                fontFamily: "Poppins-Bold",
-                                fontSize: 20,
-                            }}>
-                            Release Date:
-                        </Text>
-                        <Text
-                            style={{
-                                fontFamily: "Poppins-Regular",
-                                fontSize: 18,
-                            }}>
-                            {movie.release_date}
+                    <View style={styles.row}>
+                        <Text style={styles.sectionHeading}>Release Date:</Text>
+                        <Text style={styles.info}>
+                            {movie.release_date || movie.first_air_date}
                         </Text>
                     </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            gap: 20,
-                        }}>
-                        <Text
-                            style={{
-                                fontFamily: "Poppins-Bold",
-                                fontSize: 20,
-                            }}>
-                            Rating:
-                        </Text>
-                        <Text
-                            style={{
-                                fontFamily: "Poppins-Regular",
-                                fontSize: 18,
-                            }}>
-                            {movie.vote_average}
-                        </Text>
+                    <View style={styles.row}>
+                        <Text style={styles.sectionHeading}>Rating:</Text>
+                        <Text style={styles.info}>{movie.vote_average}</Text>
                     </View>
+                    <Pressable style={styles.button} onPress={handleWatchSite}>
+                        <Text style={styles.buttonText}>Watch Site</Text>
+                    </Pressable>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -112,13 +97,38 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold",
         textAlign: "center",
-        textShadowColor: "hsla(0, 0.00%, 48.60%, 0.75)",
-        textShadowOffset: { width: -1, height: 1 },
-        textShadowRadius: 20,
         fontStyle: "italic",
     },
     overview: {
         fontSize: 18,
         textAlign: "justify",
+    },
+    row: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 20,
+        marginTop: 10,
+    },
+    sectionHeading: {
+        fontFamily: "Poppins-Bold",
+        fontSize: 20,
+    },
+    info: {
+        fontFamily: "Poppins-Regular",
+        fontSize: 18,
+    },
+    button: {
+        backgroundColor: "#007AFF",
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        alignSelf: "center",
+        marginTop: 20,
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "600",
     },
 });

@@ -5,17 +5,18 @@ import { Home } from "lucide-react-native";
 
 const HomeLayout = () => {
     return (
-        <Tabs>
+        <Tabs screenOptions={{ tabBarStyle: { display: "none" } }}>
             <Tabs.Screen
                 name='home'
                 options={{
                     title: "Home",
                     headerShown: false,
-                    tabBarIcon: () => (
-                        <View>
-                            <Home size={25} color='black' />
-                        </View>
-                    ),
+
+                    // tabBarIcon: () => (
+                    //     <View>
+                    //         <Home size={25} color='black' />
+                    //     </View>
+                    // ),
                 }}
             />
         </Tabs>
