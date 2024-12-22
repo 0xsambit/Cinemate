@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 
 const InputField = () => {
     return (
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     textInput: {
         backgroundColor: "#f9f9f9",
         borderRadius: 20,
-        width: 320,
+        width: 350,
         fontSize: 16,
         paddingLeft: 20,
         borderColor: "black",
